@@ -1,3 +1,5 @@
+import org.jsoup.nodes.Document;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ public class Crawler extends Object {
     private static List<String> visited;
     private static List<Word> words;
 
-    public Crawler(String seed, String domain, int limit){ //crawler.words and crawler.parsed should be stored
+    public Crawler(String seed, String domain, int limit) { //crawler.words and crawler.parsed should be stored
 
         totalURLs++;
         this.domain = domain;
@@ -24,5 +26,49 @@ public class Crawler extends Object {
         // words.add(cs);
         //Page ps = new Page(domain+seed,currentID);
         //parsed.add(ps);
+    }
+
+    public void crawl() {
+
+    }
+
+    public boolean parse(Document doc,
+                         int id) {
+
+    }
+
+    public void parseLinks(Document doc) {
+
+    }
+
+    public void parseText(Document doc,
+                          int id) {
+
+    }
+
+    public void addWordToList(String word,
+                              int id) {
+
+    }
+
+    public void addToQueue(String url) {
+
+    }
+
+    public void addPageToList(Page p) {
+
+    }
+
+    public boolean isInDomain(String url) {
+
+    }
+
+    public boolean isValidURL(String url) {
+        for (int i = 0; i < url.length() ; i++) {
+            if( url.substring(i,i+3).equals(".//")){
+                return (url.substring(0,i).equals("http") || url.substring(0,i).equals("https"));
+            }
+        }
+        return false;
     }
 }
