@@ -28,8 +28,8 @@ public class Crawler extends Object {
         //parsed.add(ps);
     }
 
-    public void crawl() {
-
+    public void crawl(){
+        
     }
 
     public boolean parse(Document doc,
@@ -52,21 +52,24 @@ public class Crawler extends Object {
     }
 
     public void addToQueue(String url) {
+        toParse.add(url);
 
     }
 
     public void addPageToList(Page p) {
+        parsed.add(p);
 
     }
 
     public boolean isInDomain(String url) {
 
+
     }
 
     public boolean isValidURL(String url) {
-        for (int i = 0; i < url.length() ; i++) {
-            if( url.substring(i,i+3).equals(".//")){
-                return (url.substring(0,i).equals("http") || url.substring(0,i).equals("https"));
+        for (int i = 0; i < url.length(); i++) {
+            if (url.substring(i, i + 3).equals(".//")) {
+                return (url.substring(0, i).equals("http") || url.substring(0, i).equals("https"));
             }
         }
         return false;
