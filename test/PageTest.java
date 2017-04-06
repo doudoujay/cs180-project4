@@ -15,29 +15,28 @@ public class PageTest {
 
     @Test(timeout = 1000)
     public void testSerialVersionUID() {
-        assertEquals("Failed to implement correct serialVersionUID. Should be -1827677255104766839L",
-                -1827677255104766839L, pg.serialVersionUID);
+        assertTrue("Failed to implement correct serialVersionUID. Should be -1827677255104766839L", -1827677255104766839L == pg.serialVersionUID);
     }
 
     @Test(timeout = 1000)
     // @ScoringWeight(.01)
     public void testGetters() throws Exception {
-        assertEquals("Failed to get the URL initialized by the constructor.", testUrl, pg.getURL());
-        assertEquals("Failed to get the URLID initialized by the constructor.", testUrlId, pg.getURLID());
+        assertTrue("Failed to get the URL initialized by the constructor.", testUrl.equals(pg.getURL()));
+        assertTrue("Failed to get the URLID initialized by the constructor.", testUrlId == pg.getURLID());
     }
 
     @Test(timeout = 1000)
     // @ScoringWeight(.01)
     public void testEquals() throws Exception {
         Page testpg = new Page(testUrl, testUrlId);
-        assertEquals("Attempt to test two pages that are equal using .equals(), but it failed.", testpg, pg);
+        assertTrue("Attempt to test two pages that are equal using .equals(), but it failed.", pg.equals(testpg));
         Page testpg2 = new Page("http://www.google.com", 2);
-        assertNotEquals(".equals() should return True while two inputs are equal.", testpg2, pg);
+        assertFalse(".equals() should return True while two inputs are equal.", pg.equals(testpg2));
 
         Page testpg3 = new Page(testUrl, 2);
-        assertEquals(".equals() should return True while the two URLs are equal.", testpg3, pg);
+        assertTrue(".equals() should return True while the two URLs are equal.", pg.equals(testpg3));
 
         Page testpg4 = new Page("aabccdd", testUrlId);
-        assertEquals(".equals() should return True while the two URLIDs are equal.", testpg4, pg);
+        assertTrue(".equals() should return True while the two URLIDs are equal.", pg.equals(testpg4));
     }
 }

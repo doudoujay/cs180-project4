@@ -10,12 +10,12 @@ public class Crawler extends Object {
     private static int currentID;
     private static String domain;
     private static int limit;
-    private static List<Page> parsed;
+    public static List<Page> parsed;
     private static Parser parser;
-    private MyQueue toParse;
-    private static int totalURLs;
+    public MyQueue toParse;
+    public static int totalURLs;
     private static List<String> visited;
-    private static List<Word> words;
+    public static List<Word> words;
 
     public Crawler(String seed, String domain, int limit) { //crawler.words and crawler.parsed should be stored
 
@@ -29,7 +29,7 @@ public class Crawler extends Object {
     }
 
     public void crawl(){
-        
+
     }
 
     public boolean parse(Document doc,

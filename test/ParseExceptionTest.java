@@ -74,7 +74,7 @@ public class ParseExceptionTest {
             parser.getLinks(null);
         } catch (Exception e) {
             assertEquals("Check that the message you are throwing is correct.",
-                    e.getMessage(), "getLinks() failed. Document parameter is null.");
+                    "getLinks() failed. Document parameter is null.", e.getMessage());
         }
     }
     @Test(timeout = 1000)

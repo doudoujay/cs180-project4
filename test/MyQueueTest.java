@@ -1,6 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Queue;
 
 import static org.junit.Assert.*;
@@ -34,8 +36,8 @@ public class MyQueueTest {
         assertEquals(2, mq.size());
 
         /* Assert the removed item is a String, then the size is 1 */
-        assertEquals("Attempt to add String failed. Check that your Node data field accepts" +
-                " generic Objects", "Project 4 is Fun!", mq.remove().getData());
+        assertTrue("Attempt to add String failed. Check that your Node data field accepts" +
+                        " generic Objects", (mq.remove().getData()).equals("Project 4 is Fun!"));
         assertEquals(1, mq.size());
 
         /* Assert the removed item is an Integer, then the size is 0 */
@@ -64,10 +66,10 @@ public class MyQueueTest {
         mq.add(new Integer(5));
 
         /* First check that the peek method returns 5 as expected */
-        assertEquals("The Head element should be 5.", new Integer(5), (Integer)mq.peek().getData());
+        assertTrue("The Head element should be 5.", 5 == (Integer)mq.peek().getData());
 
         /* Now check the queue size is still 1 */
-        assertEquals("Peek should not change the Queue size.", 1, mq.size());
+        assertTrue("Peek should not change the Queue size.", 1 == mq.size());
     }
 
     @Test(timeout = 1000)
@@ -139,21 +141,21 @@ public class MyQueueTest {
             mq.add(new Integer(i));
 
         /* Check that Queue is empty */
-        assertEquals("Queue should be empty.", false, mq.isEmpty());
+        assertFalse("Queue should be empty.", mq.isEmpty());
 
         /* Remove 5 then recheck */
         for(int i = 0; i < 5; i++)
             mq.remove();
 
         /* Check that Queue is empty */
-        assertEquals("Queue should be empty.", false, mq.isEmpty());
+        assertFalse("Queue should be empty.", mq.isEmpty());
 
         /* Remove 5 more then check the Queue is empty */
         for(int i = 0; i < 5; i++)
             mq.remove();
 
         /* Check that Queue is empty */
-        assertEquals("Queue should be empty.", true, mq.isEmpty());
+        assertTrue("Queue should be empty.", mq.isEmpty());
     }
 
     @Test(timeout = 1000)
@@ -204,7 +206,7 @@ public class MyQueueTest {
 
         /* Check size */
         assertEquals("Size should be 63", 63, mq.size());
-        assertEquals("isEmpty() should return false", false, mq.isEmpty());
+        assertFalse("isEmpty() should return false", mq.isEmpty());
 
         /* Remove 300 then recheck */
         for(int i = 0; i < 300; i++)
@@ -212,14 +214,29 @@ public class MyQueueTest {
 
         /* Check size */
         assertEquals("Size should be 0", 0, mq.size());
-        assertEquals("isEmpty() should return true", true, mq.isEmpty());
+        assertTrue("isEmpty() should return true", mq.isEmpty());
 
         /* Add 10 Objects to the Queue */
         for(int i = 0 ; i < 10; i++)
             mq.add(new Integer(i));
 
         assertEquals("Size should be 10", 10, mq.size());
-        assertEquals("isEmpty() should return false", false, mq.isEmpty());
+        assertFalse("isEmpty() should return false", mq.isEmpty());
 
+    }
+
+
+    @Test(timeout = 1000)
+    public void testForOtherObjects()
+    {
+        Field[] fields = MyQueue.class.getDeclaredFields();
+        for(Field f : fields)
+        {
+            if(List.class.isAssignableFrom(f.getType()))
+            {
+                System.out.println("List interface detected.");
+                System.exit(0);
+            }
+        }
     }
 }

@@ -18,51 +18,56 @@ public class WordTest {
 
     @Test(timeout = 1000)
     public void testSerialVersionUID() {
-        assertEquals("Failed to implement correct serialVersionUID. Should be -3696191086353573895L",
-                -3696191086353573895L, w.serialVersionUID);
+        assertTrue("Failed to implement correct serialVersionUID. Should be -3696191086353573895L", -3696191086353573895L == w.serialVersionUID);
     }
 
     @Test(timeout = 1000)
     // @ScoringWeight(.01)
     public void testGetWord() throws Exception {
-        assertEquals("Failed to get the word initialized by the constructor.",
-                testWord, w.getWord());
+        assertTrue("Failed to get the word initialized by the constructor.", testWord.equals(w.getWord()));
     }
+
+    // ToDo: see if we need this.
+//    @Test(timeout = 1000)
+//    // @ScoringWeight(.01)
+//    public void testGetCount() throws Exception {
+//        assertTrue("Failed to get the word count initialized by the constructor.", w.getCount() == 1);
+//    }
 
     @Test(timeout = 1000)
     // @ScoringWeight(.01)
     public void testGetList() throws Exception {
         List<Integer> li = w.getList();
-        assertNotEquals("The returned list should NOT be null.", null, li);
-        assertEquals("The returned list size should be 1 after the object is constructed.", 1, li.size());
-        assertEquals("The first entry in the returned list should be equal to the URLID given in the constructor " +
-                "arguements.", testUrlId, li.get(0).intValue());
+        assertFalse("The returned list should NOT be null.", li == null);
+        assertTrue("The returned list size should be 1 after the object is constructed.", li.size() == 1);
+        assertTrue("The first entry in the returned list should be equal to the URLID given in the constructor " +
+                "arguements.", li.get(0).intValue() == testUrlId);
     }
 
     @Test(timeout = 1000)
     // @ScoringWeight(.01)
     public void testAddURLID() throws Exception {
         List<Integer> li = w.getList();
-        assertNotEquals("Before calling .addURLID(), the .getList() should NOT return null.", null, li);
-        assertEquals("Before calling .addURLID(), the .getList() should return the list with size 1.",
-                1, li.size());
-        assertEquals("Before calling .addURLID(), the first entry in the list returned by .getList() should be equal to" +
-                " the URLID given in the constructor arguements.", testUrlId, li.get(0).intValue());
+        assertFalse("Before calling .addURLID(), the .getList() should NOT return null.", li == null);
+        assertTrue("Before calling .addURLID(), the .getList() should return the list with size 1.",
+                li.size() == 1);
+        assertTrue("Before calling .addURLID(), the first entry in the list returned by .getList() should be equal to" +
+                " the URLID given in the constructor arguements.", li.get(0).intValue() == testUrlId);
 
         w.addURLID(2);
-        assertNotEquals("After calling .addURLID(2), the .getList() should NOT return null.", null, li);
-        assertEquals("After calling .addURLID(2), the .getList() should return the list with size 2.",
-                2, li.size());
-        assertEquals("After calling .addURLID(2), the second entry in the list returned by .getList() should be equal " +
-                "to 2", 2, li.get(1).intValue());
+        assertFalse("After calling .addURLID(2), the .getList() should NOT return null.", li == null);
+        assertTrue("After calling .addURLID(2), the .getList() should return the list with size 2.",
+                li.size() == 2);
+        assertTrue("After calling .addURLID(2), the second entry in the list returned by .getList() should be equal " +
+                "to 2", li.get(1).intValue() == 2);
     }
 
     @Test(timeout = 1000)
     // @ScoringWeight(.01)
     public void testEquals() throws Exception {
-        assertEquals("Two Word objects should be equal if the word strings given in their constructors are " +
-                "the same.", new Word(testWord, 100), w);
-        assertNotEquals("Two Word objects should NOT be equal if the word strings given in their constructors are " +
-                "different.", new Word(testWord + "aaa", 100), w);
+        assertTrue("Two Word objects should be equal if the word strings given in their constructors are " +
+                "the same." , w.equals(new Word(testWord, 100)));
+        assertFalse("Two Word objects should NOT be equal if the word strings given in their constructors are " +
+                "different." , w.equals(new Word(testWord+"aaa", 100)));
     }
 }
