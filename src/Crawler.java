@@ -1,4 +1,5 @@
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.List;
@@ -57,15 +58,33 @@ public class Crawler extends Object{
     }
 
     public void parseLinks(Document doc) throws ParseException {
+        // This method goes through the document and adds links to
+        // the links List.
         Elements links = parser.getLinks(doc);
+        for(Element link: links){
+            String oneLink = link.attr("abs:href");
+            if(isValidURL(oneLink) && isInDomain(oneLink)){
+                visited.add(oneLink);
+                totalURLs++;
+
+            }
+        }
         //parsed.add()
 
     }
 
     public void parseText(Document doc,
                           int id) throws ParseException {
-        String texts = parser.getBody(doc);
+        // This method parses through the document for the body
+        //The body of the document should contain links???? or words????
+        //separate links and add to visited??
 
+        String texts = parser.getBody(doc);
+        String[] words = texts.split("\t");
+        for(int i = 0; i < words.length; i++){
+            this.words.add(new Word(words[i],id));
+
+        }
 
 
     }
