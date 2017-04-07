@@ -23,11 +23,13 @@ public class Crawler extends Object{
     public Crawler(String seed, String domain, int limit) { //crawler.words and crawler.parsed should be stored
 
         currentID = 0;
-        totalURLs =0;
+        totalURLs = 0;
         this.domain = domain;
         this.limit = limit;
         parser = new Parser();
         toParse = new MyQueue();
+        //add to toParse???
+        toParse.add(seed);
         words = new ArrayList<>();
         parsed = new ArrayList<>();
         visited = new ArrayList<>();
@@ -41,7 +43,7 @@ public class Crawler extends Object{
 
     public void crawl() throws ParseException {
         currentID = 0;
-        System.out.println("toParse.isEmpty: " + toParse);
+        System.out.println("toParse.isEmpty: " + toParse.isEmpty());
         while((toParse != null) && !toParse.isEmpty() && currentID < limit){
             //grab url from MyQueue
             Object url = toParse.remove().getData();
@@ -52,7 +54,7 @@ public class Crawler extends Object{
                 currentID++;
             }
             //increment currentID upon successful parse
-
+            System.out.println("MyQueue: " + toParse.peek());
         }
         System.out.println("End of Crawl()");
     }
