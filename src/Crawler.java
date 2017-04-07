@@ -49,22 +49,24 @@ public class Crawler extends Object{
 
     public boolean parse(Document doc,
                          int id) throws ParseException {
-        String body = parser.getBody(doc);
-        Elements links = parser.getLinks(doc);
-        if(body == null || links == null){
-            return false;
-        }
+        parseText(doc, id);
+        parseLinks(doc);
+
         return true;
 
     }
 
-    public void parseLinks(Document doc) {
-
+    public void parseLinks(Document doc) throws ParseException {
+        Elements links = parser.getLinks(doc);
+        //parsed.add()
 
     }
 
     public void parseText(Document doc,
-                          int id) {
+                          int id) throws ParseException {
+        String texts = parser.getBody(doc);
+
+
 
     }
 
