@@ -52,7 +52,7 @@ public class Crawler extends Object {
 
     public void addWordToList(String word,
                               int id) {
-//        TODO
+        words.add(new Word(word,id));
     }
 
     public void addToQueue(String url) {
@@ -66,9 +66,9 @@ public class Crawler extends Object {
     }
 
     public boolean isInDomain(String url) {
+//        Check that the candidate URL is in the specified domain. To simplify this, you can just check if the url contains the domain as a substring.
+        return url.contains(domain);
 
-//        TODO
-        return false;
     }
 
     public boolean isValidURL(String url) {
