@@ -26,6 +26,9 @@ public class FileUtils {
 
     public boolean saveWordTable(List<Word> wordTable,
                                  String filePath) {
+        if (wordTable == null || filePath == null) {
+            return false;
+        }
         try {
             writeObj(wordTable, filePath);
             return true;
@@ -38,6 +41,9 @@ public class FileUtils {
 
     public boolean savePageTable(List<Page> pageTable,
                                  String filePath) {
+        if (pageTable == null || filePath == null) {
+            return false;
+        }
         try {
             writeObj(pageTable, filePath);
             return true;
@@ -49,6 +55,9 @@ public class FileUtils {
     }
 
     public List<Word> getWordList(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
         try {
             FileInputStream fis = new FileInputStream(new File(filePath));
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -68,6 +77,9 @@ public class FileUtils {
     }
 
     public List<Page> getPageList(String filePath) {
+        if(filePath == null){
+            return null;
+        }
         try {
             FileInputStream fis = new FileInputStream(new File(filePath));
             ObjectInputStream ois = new ObjectInputStream(fis);
