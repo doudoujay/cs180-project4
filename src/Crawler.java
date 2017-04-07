@@ -2,6 +2,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,10 +22,17 @@ public class Crawler extends Object{
 
     public Crawler(String seed, String domain, int limit) { //crawler.words and crawler.parsed should be stored
 
-        totalURLs++;
+        currentID = 0;
+        totalURLs =0;
         this.domain = domain;
         this.limit = limit;
-        this.parser = new Parser();
+        parser = new Parser();
+        toParse = new MyQueue();
+        words = new ArrayList<>();
+        parsed = new ArrayList<>();
+        visited = new ArrayList<>();
+        words.add(new Word(seed, currentID));
+        parsed.add(new Page(seed, currentID));
         // Word cs = new Word(domain+seed, currentID);
         // words.add(cs);
         //Page ps = new Page(domain+seed,currentID);
@@ -33,7 +41,8 @@ public class Crawler extends Object{
 
     public void crawl() throws ParseException {
         currentID = 0;
-        while(!toParse.isEmpty() && currentID < limit){
+        System.out.println("toParse.isEmpty: " + toParse);
+        while((toParse != null) && !toParse.isEmpty() && currentID < limit){
             //grab url from MyQueue
             Object url = toParse.remove().getData();
             //parse method
@@ -45,7 +54,7 @@ public class Crawler extends Object{
             //increment currentID upon successful parse
 
         }
-
+        System.out.println("End of Crawl()");
     }
 
     public boolean parse(Document doc,
@@ -58,14 +67,14 @@ public class Crawler extends Object{
     }
 
     public void parseLinks(Document doc) throws ParseException {
-        // This method goes through the document and adds links to
-        // the links List.
         Elements links = parser.getLinks(doc);
         for(Element link: links){
             String oneLink = link.attr("abs:href");
+            System.out.println("parseLinks: " + oneLink);
             if(isValidURL(oneLink) && isInDomain(oneLink)){
                 visited.add(oneLink);
                 totalURLs++;
+
 
             }
         }
@@ -76,14 +85,17 @@ public class Crawler extends Object{
     public void parseText(Document doc,
                           int id) throws ParseException {
         // This method parses through the document for the body
-        //The body of the document should contain links???? or words????
+        //The body of the document should contain links????
         //separate links and add to visited??
-
         String texts = parser.getBody(doc);
-        String[] words = texts.split("\t");
-        for(int i = 0; i < words.length; i++){
-            this.words.add(new Word(words[i],id));
-
+        String[] links = texts.split("\n");
+        for(int i = 0; i < links.length; i++){
+            if(isValidURL(links[i]) && isInDomain(links[i])) {
+                totalURLs++; // Do I increment totalURLs here????
+                Page page = new Page(links[i],id);
+                parsed.add(page);
+                visited.add(links[i]);
+            }
         }
 
 
@@ -91,13 +103,19 @@ public class Crawler extends Object{
 
     public void addWordToList(String word,
                               int id) {
+
         Word n = new Word(word.toLowerCase(),id);
+
         words.add(n);
 
     }
 
     public void addToQueue(String url) {
+        if(url == null){
+            return;
+        }
         toParse.add(url);
+        totalURLs++;
 
     }
 
@@ -115,11 +133,13 @@ public class Crawler extends Object{
     }
 
     public boolean isValidURL(String url) {
-        for (int i = 0; i < url.length(); i++) {
-            if (url.substring(i, i + 3).equals(".//")) {
+
+        for (int i = 0; i < url.length()-3; i++) {
+            if (url.substring(i, i + 3).equals("://")) {
                 return (url.substring(0, i).equals("http") || url.substring(0, i).equals("https"));
             }
         }
         return false;
+
     }
 }
