@@ -29,26 +29,30 @@ public class Crawler extends Object {
     }
 
     public void crawl(){
+//        TODO
 
     }
 
     public boolean parse(Document doc,
                          int id) {
+//        TODO
+        return false;
 
     }
 
     public void parseLinks(Document doc) {
+//        TODO
 
     }
 
     public void parseText(Document doc,
                           int id) {
-
+//        TODO
     }
 
     public void addWordToList(String word,
                               int id) {
-
+//        TODO
     }
 
     public void addToQueue(String url) {
@@ -63,7 +67,8 @@ public class Crawler extends Object {
 
     public boolean isInDomain(String url) {
 
-
+//        TODO
+        return false;
     }
 
     public boolean isValidURL(String url) {
