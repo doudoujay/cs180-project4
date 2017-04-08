@@ -3,6 +3,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -57,12 +58,15 @@ public class Crawler extends Object{
             System.out.println("MyQueue: " + toParse.peek());
         }
         System.out.println("End of Crawl()");
+
+
     }
 
     public boolean parse(Document doc,
                          int id) throws ParseException {
-        parseText(doc, id);
+
         parseLinks(doc);
+        parseText(doc,id);
 
         return true;
 
@@ -74,8 +78,11 @@ public class Crawler extends Object{
             String oneLink = link.attr("abs:href");
             System.out.println("parseLinks: " + oneLink);
             if(isValidURL(oneLink) && isInDomain(oneLink)){
+
+                System.out.println("parseLinks: " + oneLink);
                 visited.add(oneLink);
                 totalURLs++;
+                parsed.add(new Page(oneLink,currentID));
 
 
             }
@@ -87,17 +94,25 @@ public class Crawler extends Object{
     public void parseText(Document doc,
                           int id) throws ParseException {
         // This method parses through the document for the body
-        //The body of the document should contain links????
+        //The body of the document should contain links???? add words?
+
         //separate links and add to visited??
         String texts = parser.getBody(doc);
-        String[] links = texts.split("\n");
-        for(int i = 0; i < links.length; i++){
-            if(isValidURL(links[i]) && isInDomain(links[i])) {
-                totalURLs++; // Do I increment totalURLs here????
-                Page page = new Page(links[i],id);
-                parsed.add(page);
-                visited.add(links[i]);
-            }
+        String[] links = texts.split(" ");
+
+        System.out.println("====parseText=======");
+        System.out.println("Split Strings: " + Arrays.toString(links));
+        System.out.println("Body Text: " + texts);
+
+        for(int i = 1; i < links.length; i++){
+
+            // Do I increment totalURLs here????
+            Page page = new Page(links[i],id);
+            System.out.println("parseText: " + links[i]);
+            parsed.add(page);
+            visited.add(links[i]);
+            words.add(new Word(links[i],id));
+
         }
 
 
