@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,27 +40,46 @@ public class Search {
 
         // Split query String into array of terms
         String[] terms = query.split(" ");
+        System.out.println("Query: " + query);
 
+        System.out.println("terms size: " + terms.length);
         //Create 5 Threads using SearchThread class
 
-        SearchThread[] sthreads ={ new SearchThread(0,200,terms), new SearchThread(201,400,terms),
-                new SearchThread(401,600,terms), new SearchThread(601,800,terms),
-                new SearchThread(801,1000,terms)};
-
-        int i = 0;
+        int start = 0;
+        int increment = terms.length/5;
+        int end = terms.length/5 ;
         Thread[] threads = new Thread[5];
+        boolean first = true;
+
         for(Thread thr: threads){
-            thr = new Thread(sthreads[i]);
-            i++;
+
+            System.out.println("Start: " + start + "\tIncrement: " + increment + "\tEnd: " + end);
+            thr = new Thread(new SearchThread(start, end, terms));
+            // System.out.println("i: " + i);
+            System.out.println("Thread Created!");
+            start = start + increment;
+            end = end + increment;
+            if(first){
+                start++;
+                first = false;
+            }
+
         }
+
+        System.out.println(Arrays.toString(threads));
         //Start Threads
-        for( Thread t : threads)
-            t.start();
+        for( Thread ts : threads) {
+            ts.start();
+            System.out.println("Thread Start!");
+        }
+
+
 
 
         for( Thread t: threads)
             try {
                 t.join();
+                System.out.println("Thread Join!");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -67,8 +87,9 @@ public class Search {
 
         //sort list by score
         sort();
+        System.out.println("ResultSet" + resultSet);
+        return resultSet;
 
-        return null;
     }
 
     public void nullCheck() {
