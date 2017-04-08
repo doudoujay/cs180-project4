@@ -5,14 +5,13 @@ import java.util.Comparator;
  * Created by jay on 2017/3/23.
  */
 public class Result implements Serializable, Comparable<Result> {
-    static long serialVersionUID;
+    static final long serialVersionUID = -938761094876384658L;
     public int score = 1;
     public int urlID;
     public String url;
 
     public Result(String url,
                   int urlID) {
-        serialVersionUID = -938761094876384658L;
         this.url = url;
         this.urlID = urlID;
     }
