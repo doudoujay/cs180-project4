@@ -110,11 +110,12 @@ public class Crawler extends Object{
         for(int i = 1; i < links.length; i++){
 
             // Do I increment totalURLs here????
-            Page page = new Page(links[i],id);
+            String word = links[i].toLowerCase();
+            Page page = new Page(word,id);
             System.out.println("parseText: " + links[i]);
             parsed.add(page);
             visited.add(links[i]);
-            words.add(new Word(links[i],id));
+            words.add(new Word(word,id));
 
         }
 
