@@ -1,7 +1,3 @@
-import java.util.Collection;
-import java.util.Collections;
-import java.io.BufferedReader;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +9,7 @@ public class Search {
     public static List<Page> pageList;
     public static List<Word> wordList;
     public static List<Result> resultSet;
+    public static Object syncGate;
     private String wordListFile;
     private String pageListFile;
     private FileUtils fu = new FileUtils();
@@ -44,17 +41,28 @@ public class Search {
         String[] terms = query.split(" ");
 
         //Create 5 Threads using SearchThread class
-        int start = 0;
-        int end = 200;
-        Thread[] threads ={ new SearchThread(0,200,terms), new SearchThread(201,400,terms)};//add more threads?
 
+        SearchThread[] sthreads ={ new SearchThread(0,200,terms), new SearchThread(201,400,terms),
+                new SearchThread(401,600,terms), new SearchThread(601,800,terms),
+                new SearchThread(801,1000,terms)};
+
+        int i = 0;
+        Thread[] threads = new Thread[5];
+        for(Thread thr: threads){
+            thr = new Thread(sthreads[i]);
+            i++;
+        }
         //Start Threads
         for( Thread t : threads)
             t.start();
 
 
         for( Thread t: threads)
-            t.join();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
         //sort list by score
