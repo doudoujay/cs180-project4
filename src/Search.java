@@ -29,14 +29,6 @@ public class Search {
 
     public void setup(String wordListFile,
                       String pageListFile) {
-//
-        FileUtils fileUtil = new FileUtils();
-
-        pageList = fileUtil.getPageList(pageListFile);
-        wordList = fileUtil.getWordList(wordListFile);
-      //  fileUtil.savePageTable(pageList,pageListFile);
-     //   fileUtil.saveWordTable(wordList,wordListFile);
-
 
 
         pageList = fu.getPageList(pageListFile);
