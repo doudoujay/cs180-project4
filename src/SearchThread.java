@@ -16,7 +16,7 @@ public class SearchThread implements Runnable {
 
     @Override
     public void run() {
-        synchronized (Search.syncGate){
+   //     synchronized (Search.syncGate){
             for (String term :terms) {
                 Word keyWord = findTerm(term);
                 if (keyWord != null) {
@@ -32,7 +32,7 @@ public class SearchThread implements Runnable {
                     }
                 }
 
-            }
+            //}
 
         }
 

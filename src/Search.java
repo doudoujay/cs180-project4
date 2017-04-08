@@ -61,17 +61,15 @@ public class Search {
         boolean first = true;
 
         for (int i = 0; i < 5; i++) {
-            if(remainder != 0){
-                end++;
-                remainder--;
-            }
+
 
             System.out.println("Start: " + start + "\tIncrement: " + increment + "\tEnd: " + end);
             threads[i] = new Thread(new SearchThread(start, end, terms));
             // System.out.println("i: " + i);
             System.out.println("Thread Created!");
             start = start + increment;
-            end = end + increment;
+            end = end + increment + 1 ;
+
             if (first) {
                 start++;
                 first = false;
