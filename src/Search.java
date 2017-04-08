@@ -42,7 +42,7 @@ public class Search {
 
         // Split query String into array of terms
         String[] terms = query.split(" ");
-        System.out.println("Query: " + query);
+        System.out.println("\nQuery: " + query);
 
         System.out.println("terms size: " + terms.length);
         //Create 5 Threads using SearchThread class
@@ -80,13 +80,13 @@ public class Search {
 
 
         }
-        System.out.println(Arrays.toString(threads));
+        System.out.println("Threads[]: " + Arrays.toString(threads));
 
         //Start Threads
         for(int i = 0; i < 5 ; i++) {
             Thread ts = threads[i];
             ts.start();
-            ts.run();
+
             System.out.println("Thread Start!");
         }
 
