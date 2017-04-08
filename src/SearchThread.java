@@ -16,15 +16,41 @@ public class SearchThread implements Runnable {
 
     @Override
     public void run() {
-//        TODO
+        synchronized (Search.syncGate){
+            for (String term :terms) {
+                Word keyWord = findTerm(term);
+                if (keyWord != null) {
+                    for (int id:keyWord.getList()
+                            ) {
+                        Result result = new Result(getUrlStringFromID(id),id);
+                        if(Search.resultSet.contains(result)){
+                            int index = Search.resultSet.indexOf(result);
+                            Search.resultSet.get(index).incrementScore();
+                        }else {
+                            Search.resultSet.add(result);
+                        }
+                    }
+                }
+
+            }
+
+        }
 
     }
     public Word findTerm(String term){
-//        TODO
-//        Find and return the associated Word object for a given term
-        for(int i = 0; i < terms.length; i++){
-            if(terms[i].equals(term)){
 
+        for (int i = start; i < finish+1; i++) {
+            if(Search.wordList.get(i).getWord().equals(term)){
+                return Search.wordList.get(i);
+            }
+        }
+        return null;
+    }
+    public String getUrlStringFromID(int id){
+        for (Page page:Search.pageList
+             ) {
+            if(page.getURLID() == id){
+                return page.getURL();
             }
         }
         return null;
