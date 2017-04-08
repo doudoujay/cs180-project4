@@ -1,9 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.*;
-import java.io.BufferedReader;
-import java.io.File;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by jay on 3/30/17.
@@ -21,8 +19,9 @@ public class Search {
                   String pageListFile) {
         this.wordListFile = wordListFile;
         this.pageListFile = pageListFile;
-        pageList = Collections.synchronizedList(new ArrayList<Page>());
-        wordList = Collections.synchronizedList(new ArrayList<Word>());
+        // pageList = Collections.synchronizedList(new ArrayList<Page>());
+        // wordList = Collections.synchronizedList(new ArrayList<Word>());
+        setup(wordListFile,pageListFile);
         resultSet = Collections.synchronizedList(new ArrayList<Result>());
 
     }
@@ -38,6 +37,7 @@ public class Search {
 
     public List<Result> executeQuery(String query) {
 //        TODO
+        //setup(wordListFile,pageListFile);
         //Execute a query over built tables and return an arraylist of Result objects.
 
         // Split query String into array of terms
@@ -46,36 +46,49 @@ public class Search {
 
         System.out.println("terms size: " + terms.length);
         //Create 5 Threads using SearchThread class
+        nullCheck();
+        System.out.println("NullCheck: " + pageList + wordList);
+
 
         int start = 0;
-        int increment = terms.length/5;
-        int end = terms.length/5 ;
+        int increment = wordList.size()/5;
+        int remainder = wordList.size()%5;
+        System.out.println("Word List Size: " + wordList.size());
+        System.out.println("Page List Size: " + pageList.size());
+        System.out.println("Remainder: " + remainder);
+        int end = start + increment;
         Thread[] threads = new Thread[5];
         boolean first = true;
 
-        for(Thread thr: threads){
+        for (int i = 0; i < 5; i++) {
+            if(remainder != 0){
+                end++;
+                remainder--;
+            }
 
             System.out.println("Start: " + start + "\tIncrement: " + increment + "\tEnd: " + end);
-            thr = new Thread(new SearchThread(start, end, terms));
+            threads[i] = new Thread(new SearchThread(start, end, terms));
             // System.out.println("i: " + i);
             System.out.println("Thread Created!");
             start = start + increment;
             end = end + increment;
-            if(first){
+            if (first) {
                 start++;
                 first = false;
             }
 
-        }
 
+
+        }
         System.out.println(Arrays.toString(threads));
+
         //Start Threads
-        for( Thread ts : threads) {
+        for(int i = 0; i < 5 ; i++) {
+            Thread ts = threads[i];
             ts.start();
+            ts.run();
             System.out.println("Thread Start!");
         }
-
-
 
 
         for( Thread t: threads)
@@ -89,6 +102,8 @@ public class Search {
 
         //sort list by score
         sort();
+        System.out.println("Page Set: " + pageList);
+        System.out.println("Word Set: " + wordList);
         System.out.println("ResultSet" + resultSet);
         return resultSet;
 
@@ -108,7 +123,7 @@ public class Search {
     public void sort() {
 //        TODO
         //sort ArrayList of Results by their score
-
+        System.out.println("Sort Called");
 //        Method to sort our ArrayList of Results by their score. Since the Result List is global, we don't need to pass it as a parameter or return it - we can simply access it within the method.
         Collections.sort(resultSet);
     }
