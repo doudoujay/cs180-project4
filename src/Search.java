@@ -1,10 +1,7 @@
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.io.BufferedReader;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by jay on 3/30/17.
@@ -16,6 +13,7 @@ public class Search {
     private String wordListFile;
     private String pageListFile;
     private FileUtils fu = new FileUtils();
+    public static Object syncGate;
 
     public Search(String wordListFile,
                   String pageListFile) {
