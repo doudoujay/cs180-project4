@@ -20,6 +20,7 @@ public class Crawler extends Object {
     public static int totalURLs;
     private static List<String> visited;
     public static List<Word> words;
+    public FileUtils fu = new FileUtils();
 
     public Crawler(String seed, String domain, int limit) { //crawler.words and crawler.parsed should be stored
 
@@ -64,6 +65,10 @@ public class Crawler extends Object {
 
         }
         System.out.println("End of Crawl(), total url:"+totalURLs);
+//        Same the results in the file
+        fu.savePageTable(parsed,"data/parsed.txt");
+        fu.saveWordTable(words,"data/words.txt");
+        System.out.println("Data saved!");
 
 
     }
@@ -109,8 +114,6 @@ public class Crawler extends Object {
 
 
         for (int i = 1; i < parsedWords.length; i++) {
-
-            // Do I increment totalURLs here????
             Page page = new Page(parsedWords[i], id);
             addWordToList(parsedWords[i], id);
 
@@ -123,10 +126,16 @@ public class Crawler extends Object {
 
     public void addWordToList(String word,
                               int id) {
-
+//    Same word shoud in the same entry.
         Word n = new Word(word.toLowerCase(), id);
+        if(words.contains(n)){
+            int index = words.indexOf(n);
+            words.get(index).addURLID(id);
+        }else {
+            words.add(n);
 
-        words.add(n);
+        }
+
 
     }
 
