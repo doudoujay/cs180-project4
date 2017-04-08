@@ -45,14 +45,12 @@ public class Crawler extends Object{
     public void crawl() throws ParseException {
         currentID = 0;
         System.out.println("toParse.isEmpty: " + toParse.isEmpty());
-
-//        process continues either until the Queue is empty or a preset limit to the number of URLs to visit is reached
         while((toParse != null) && !toParse.isEmpty() && currentID < limit){
             //grab url from MyQueue
-            String url = (String)toParse.remove().getData();
+            Object url = toParse.remove().getData();
             //parse method
 
-            if(parse(parser.getDocument(url),currentID)){
+            if(parse(parser.getDocument(url.toString()),currentID)){
                 //parsed.add()
                 currentID++;
             }
@@ -95,7 +93,6 @@ public class Crawler extends Object{
 
     public void parseText(Document doc,
                           int id) throws ParseException {
-//        Parse a Document for the body of text
         // This method parses through the document for the body
         //The body of the document should contain links???? add words?
 
@@ -112,9 +109,8 @@ public class Crawler extends Object{
             // Do I increment totalURLs here????
             Page page = new Page(links[i],id);
             System.out.println("parseText: " + links[i]);
-            parsed.add(page);
-            visited.add(links[i]);
-            words.add(new Word(links[i],id));
+            addPageToList(page);
+            addWordToList(links[i],id);
 
         }
 
