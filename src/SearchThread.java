@@ -22,6 +22,11 @@ public class SearchThread implements Runnable {
     public Word findTerm(String term){
 //        TODO
 //        Find and return the associated Word object for a given term
+        for(int i = 0; i < terms.length; i++){
+            if(terms[i].equals(term)){
+
+            }
+        }
         return null;
     }
 }
