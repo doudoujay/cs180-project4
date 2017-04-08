@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,10 +12,10 @@ public class Search {
     public static List<Page> pageList;
     public static List<Word> wordList;
     public static List<Result> resultSet;
+    public static Object syncGate;
     private String wordListFile;
     private String pageListFile;
     private FileUtils fu = new FileUtils();
-    public static Object syncGate;
 
     public Search(String wordListFile,
                   String pageListFile) {
@@ -40,25 +42,56 @@ public class Search {
 
         // Split query String into array of terms
         String[] terms = query.split(" ");
+        System.out.println("Query: " + query);
 
+        System.out.println("terms size: " + terms.length);
         //Create 5 Threads using SearchThread class
-        int start = 0;
-        int end = 200;
-        Thread[] threads ={ new SearchThread(0,200,terms), new SearchThread(201,400,terms)};//add more threads?
 
+        int start = 0;
+        int increment = terms.length/5;
+        int end = terms.length/5 ;
+        Thread[] threads = new Thread[5];
+        boolean first = true;
+
+        for(Thread thr: threads){
+
+            System.out.println("Start: " + start + "\tIncrement: " + increment + "\tEnd: " + end);
+            thr = new Thread(new SearchThread(start, end, terms));
+            // System.out.println("i: " + i);
+            System.out.println("Thread Created!");
+            start = start + increment;
+            end = end + increment;
+            if(first){
+                start++;
+                first = false;
+            }
+
+        }
+
+        System.out.println(Arrays.toString(threads));
         //Start Threads
-        for( Thread t : threads)
-            t.start();
+        for( Thread ts : threads) {
+            ts.start();
+            System.out.println("Thread Start!");
+        }
+
+
 
 
         for( Thread t: threads)
-            t.join();
+            try {
+                t.join();
+                System.out.println("Thread Join!");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
         //sort list by score
         sort();
+        System.out.println("ResultSet" + resultSet);
+        return resultSet;
 
-        return null;
     }
 
     public void nullCheck() {
