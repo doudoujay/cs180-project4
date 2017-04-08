@@ -53,12 +53,14 @@ public class Search {
         int start = 0;
         int increment = wordList.size()/5;
         int remainder = wordList.size()%5;
+        int end = increment;
         System.out.println("Word List Size: " + wordList.size());
         System.out.println("Page List Size: " + pageList.size());
         System.out.println("Remainder: " + remainder);
-        int end = start + increment;
+
         Thread[] threads = new Thread[5];
         boolean first = true;
+
 
         for (int i = 0; i < 5; i++) {
 
@@ -67,12 +69,21 @@ public class Search {
             threads[i] = new Thread(new SearchThread(start, end, terms));
             // System.out.println("i: " + i);
             System.out.println("Thread Created!");
-            start = start + increment;
-            end = end + increment + 1 ;
+
 
             if (first) {
                 start++;
                 first = false;
+                start+= increment;
+                end+= increment;
+
+            }else if(i == 3){
+                start+= increment;
+                end = wordList.size()-1;
+
+            }else {
+                start += increment;
+                end += increment;
             }
 
 
