@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Paulina on 3/23/2017.
  */
-public class Crawler extends Object{
+public class Crawler extends Object {
 
     private static int currentID;
     private static String domain;
@@ -47,19 +47,23 @@ public class Crawler extends Object{
         System.out.println("toParse.isEmpty: " + toParse.isEmpty());
 
 //        process continues either until the Queue is empty or a preset limit to the number of URLs to visit is reached
-        while((toParse != null) && !toParse.isEmpty() && currentID < limit){
+        while ((toParse != null) && !toParse.isEmpty() && currentID < limit) {
             //grab url from MyQueue
             Object url = toParse.remove().getData();
             //parse method
 
-            if(parse(parser.getDocument(url.toString()),currentID)){
-                //parsed.add()
-                currentID++;
+            try {
+                if (parse(parser.getDocument(url.toString()), currentID)) {
+                    //parsed.add()
+                    currentID++;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            //increment currentID upon successful parse
-            System.out.println("MyQueue: " + toParse.peek());
+            //increment currentID upon successful parse)
+
         }
-        System.out.println("End of Crawl()");
+        System.out.println("End of Crawl(), total url:"+totalURLs);
 
 
     }
@@ -68,7 +72,7 @@ public class Crawler extends Object{
                          int id) throws ParseException {
 
         parseLinks(doc);
-        parseText(doc,id);
+        parseText(doc, id);
 
         return true;
 
@@ -76,20 +80,20 @@ public class Crawler extends Object{
 
     public void parseLinks(Document doc) throws ParseException {
         Elements links = parser.getLinks(doc);
-        for(Element link: links){
+        for (Element link : links) {
             String oneLink = link.attr("abs:href");
-            System.out.println("parseLinks: " + oneLink);
-            if(isValidURL(oneLink) && isInDomain(oneLink)){
 
-                System.out.println("parseLinks: " + oneLink);
+            if (isValidURL(oneLink) && isInDomain(oneLink)) {
+
                 visited.add(oneLink);
-                totalURLs++;
-                parsed.add(new Page(oneLink,currentID));
+//                Add to queue
+                addToQueue(oneLink);
+                addPageToList(new Page(oneLink, currentID));
 
 
             }
         }
-        //parsed.add()
+        System.out.println("Page(Url) size:"+parsed.size());
 
     }
 
@@ -101,21 +105,18 @@ public class Crawler extends Object{
 
         //separate links and add to visited??
         String texts = parser.getBody(doc);
-        String[] links = texts.split(" ");
+        String[] parsedWords = texts.split(" ");
 
-        System.out.println("====parseText=======");
-        System.out.println("Split Strings: " + Arrays.toString(links));
-        System.out.println("Body Text: " + texts);
 
-        for(int i = 1; i < links.length; i++){
+        for (int i = 1; i < parsedWords.length; i++) {
 
             // Do I increment totalURLs here????
-            Page page = new Page(links[i],id);
-            System.out.println("parseText: " + links[i]);
-            addPageToList(page);
-            addWordToList(links[i],id);
+            Page page = new Page(parsedWords[i], id);
+            addWordToList(parsedWords[i], id);
 
         }
+        System.out.println("words: "+words.size()+" url id "+id);
+
 
 
     }
@@ -123,14 +124,14 @@ public class Crawler extends Object{
     public void addWordToList(String word,
                               int id) {
 
-        Word n = new Word(word.toLowerCase(),id);
+        Word n = new Word(word.toLowerCase(), id);
 
         words.add(n);
 
     }
 
     public void addToQueue(String url) {
-        if(url == null){
+        if (url == null) {
             return;
         }
         toParse.add(url);
@@ -144,7 +145,7 @@ public class Crawler extends Object{
     }
 
     public boolean isInDomain(String url) {
-        if(url.contains(domain)){
+        if (url.contains(domain)) {
             return true;
         }
         return false;
@@ -153,7 +154,7 @@ public class Crawler extends Object{
 
     public boolean isValidURL(String url) {
 
-        for (int i = 0; i < url.length()-3; i++) {
+        for (int i = 0; i < url.length() - 3; i++) {
             if (url.substring(i, i + 3).equals("://")) {
                 return (url.substring(0, i).equals("http") || url.substring(0, i).equals("https"));
             }
