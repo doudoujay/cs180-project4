@@ -73,7 +73,11 @@ public class Search {
 
         //sort list by score
         sort();
-        System.out.println("ResultSet" + resultSet);
+        for(int i = 0; i<10 && i < resultSet.size(); i++)
+        {
+            Result r = resultSet.get(i);
+            System.out.println((i + 1) + ") " + r.getURL() + ", score: " + r.getScore());
+        }
         return resultSet;
 
     }

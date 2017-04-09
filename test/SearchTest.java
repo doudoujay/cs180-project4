@@ -70,6 +70,12 @@ public class SearchTest {
         List<Result> testList;
 
         //Single term query
+        for(int i = 0; i<10 && i < res1.size(); i++)
+        {
+            Result r = res1.get(i);
+            System.out.println((i + 1) + ") " + r.getURL() + ", score: " + r.getScore());
+        }
+        System.out.println("________________________");
         testList = sr.executeQuery("Purdue");
         boolean comparisonResult = resListCompareSorted(testList, res1);
         assertTrue("Failed to correctly execute query \"Purdue\"", correctEvaluation);
@@ -81,6 +87,12 @@ public class SearchTest {
         List<Result> testList;
 
         //Multiple term query
+        for(int i = 0; i<10 && i < res2.size(); i++)
+        {
+            Result r = res2.get(i);
+            System.out.println((i + 1) + ") " + r.getURL() + ", score: " + r.getScore());
+        }
+        System.out.println("________________________");
         testList = sr.executeQuery("Computer Science Students");
         boolean comparisonResult = resListCompareSorted(testList, res2);
         assertTrue("Failed to correctly execute query \"Computer Science Students\"", correctEvaluation);

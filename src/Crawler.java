@@ -4,6 +4,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Paulina on 3/23/2017.
@@ -35,11 +37,7 @@ public class Crawler extends Object {
         parsed = new ArrayList<>();
         visited = new ArrayList<>();
         words.add(new Word(seed, currentID));
-        parsed.add(new Page(seed, currentID));
-        // Word cs = new Word(domain+seed, currentID);
-        // words.add(cs);
-        //Page ps = new Page(domain+seed,currentID);
-        //parsed.add(ps);
+
     }
 
     public void crawl() throws ParseException {
@@ -54,31 +52,44 @@ public class Crawler extends Object {
 
             try {
                 if (parse(parser.getDocument(url.toString()), currentID)) {
-                    //parsed.add()
+                    addPageToList(new Page(url.toString(), currentID));
                     currentID++;
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
+
+
             //increment currentID upon successful parse)
 
         }
-        System.out.println("End of Crawl(), total url:"+totalURLs);
+        System.out.println("End of Crawl(), total url:" + parsed.size());
 //        Same the results in the file
-        fu.savePageTable(parsed,"data/parsed.txt");
-        fu.saveWordTable(words,"data/words.txt");
-        System.out.println("Data saved!");
-
+        fu.savePageTable(parsed, "data/parsed.txt");
+        fu.saveWordTable(words, "data/words.txt");
+//        for (Word w: words
+//             ) {
+//            System.out.println(w.getWord());
+//            for (int i:w.getList()
+//                 ) {
+//                System.out.printf(Integer.toString(i));
+//            }
+//            System.out.println("-------------------");
+//        }
 
     }
 
     public boolean parse(Document doc,
                          int id) throws ParseException {
+        try {
+            parseLinks(doc);
+            parseText(doc, id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
-        parseLinks(doc);
-        parseText(doc, id);
-
-        return true;
 
     }
 
@@ -92,12 +103,12 @@ public class Crawler extends Object {
                 visited.add(oneLink);
 //                Add to queue
                 addToQueue(oneLink);
-                addPageToList(new Page(oneLink, currentID));
+
 
 
             }
         }
-        System.out.println("Page(Url) size:"+parsed.size());
+        System.out.println("Pages amount: " + parsed.size());
 
     }
 
@@ -109,16 +120,15 @@ public class Crawler extends Object {
 
         //separate links and add to visited??
         String texts = parser.getBody(doc);
-        String[] parsedWords = texts.split(" ");
+        Pattern p = Pattern.compile("[\\w']+");
+        Matcher m = p.matcher(texts);
 
-
-        for (int i = 1; i < parsedWords.length; i++) {
-            Page page = new Page(parsedWords[i], id);
-            addWordToList(parsedWords[i], id);
-
+        while (m.find()) {
+            String foundText = texts.substring(m.start(), m.end());
+            addWordToList(foundText, id);
         }
-        System.out.println("words: "+words.size()+" url id "+id);
 
+        System.out.println("words: " + words.size() + " url id " + id);
 
 
     }
@@ -127,10 +137,10 @@ public class Crawler extends Object {
                               int id) {
 //    Same word shoud in the same entry.
         Word n = new Word(word.toLowerCase(), id);
-        if(words.contains(n)){
+        if (words.contains(n)) {
             int index = words.indexOf(n);
             words.get(index).addURLID(id);
-        }else {
+        } else {
             words.add(n);
 
         }
@@ -139,6 +149,7 @@ public class Crawler extends Object {
     }
 
     public void addToQueue(String url) {
+//         Should avoid duplicated URLs.
         if (url == null) {
             return;
         }

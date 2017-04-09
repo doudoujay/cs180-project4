@@ -10,27 +10,29 @@ public class Driver {
 	/**
 	 * Method to start a new crawler with a given number of threads.
 	 */
-	/*
 	public void crawl()
 	{
 		long start = System.currentTimeMillis();
 
 		Crawler c = new Crawler("https://cs.purdue.edu", "cs.purdue.edu", 250);
-		c.crawl();
+		try{
+
+			c.crawl();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 
     	long end = System.currentTimeMillis();
     	System.out.println("Stats: ");
     	System.out.println("Number of parsed pages: " + Crawler.parsed.size());
     	System.out.println("Number of words: " + Crawler.words.size());
-    	
+
     	System.out.println("Total time: " + (end - start) + "ms.");
 	}
-	*/
 	/**
 	 * Save the word and page table from Crawler to memory
 	 * by calling the required FileUtils methods. 
 	 */
-	/*
 	public void save()
 	{
 		// Save Info 
@@ -42,13 +44,12 @@ public class Driver {
 		// Save Parsed List 
 		f.savePageTable(Crawler.parsed, "parsed.txt");
 	}
-	*/
 	/**
 	 * Execute a query by invoking the necessary
 	 * components of the Search class
 	 * @param query - search terms to be processed
 	 */
-	/*
+
 	public void search(String query)
 	{
 		// Prepare Search 
@@ -60,19 +61,19 @@ public class Driver {
 		
 		System.out.println("Query: " + query);
 		System.out.println(result.size() + " results found in " + (end - start) + "ms:\n");
-		for(int i = 0; i < 10 && i < result.size(); i++)
+		for(int i = 0; i<10 && i < result.size(); i++)
 		{
 			Result r = result.get(i);
 			System.out.println((i + 1) + ") " + r.getURL() + ", score: " + r.getScore());
 		}
 	}
-	*/
+
 	public static void main(String[] args)
     {    	
     	Driver d = new Driver();
-    	//d.crawl();
-    	//d.save();
-    	/*
+    	d.crawl();
+    	d.save();
+
     	Scanner sc = new Scanner(System.in);
     	while(true)
 		{
@@ -94,6 +95,5 @@ public class Driver {
 					System.out.println("Invalid response, try again:");
 			}
 		}
-		*/
     }
 }

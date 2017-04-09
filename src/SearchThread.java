@@ -40,7 +40,7 @@ public class SearchThread implements Runnable {
     public Word findTerm(String term){
 
         for (int i = start; i < finish; i++) {
-            if(Search.wordList.get(i).getWord().equals(term)){
+            if(Search.wordList.get(i).getWord().contains(term)){
                 return Search.wordList.get(i);
             }
         }
