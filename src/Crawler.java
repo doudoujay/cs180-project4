@@ -36,7 +36,8 @@ public class Crawler extends Object {
         words = new ArrayList<>();
         parsed = new ArrayList<>();
         visited = new ArrayList<>();
-        words.add(new Word(seed, currentID));
+        //words.add(new Word(seed, currentID));
+        addWordToList(seed,currentID);
 
     }
 
@@ -94,16 +95,20 @@ public class Crawler extends Object {
     }
 
     public void parseLinks(Document doc) throws ParseException {
+
         Elements links = parser.getLinks(doc);
         for (Element link : links) {
             String oneLink = link.attr("abs:href");
 
             if (isValidURL(oneLink) && isInDomain(oneLink)) {
-
-                visited.add(oneLink);
+                if (visited.contains(oneLink)) {
+                    int index = visited.indexOf(oneLink);
+                    return;
+                }else {
+                    visited.add(oneLink);
 //                Add to queue
-                addToQueue(oneLink);
-
+                    addToQueue(oneLink);
+                }
 
 
             }
@@ -116,7 +121,7 @@ public class Crawler extends Object {
                           int id) throws ParseException {
 //        Parse a Document for the body of text
         // This method parses through the document for the body
-        //The body of the document should contain links???? add words?
+        //The body of the document should contain words?
 
         //separate links and add to visited??
         String texts = parser.getBody(doc);
@@ -128,7 +133,7 @@ public class Crawler extends Object {
             addWordToList(foundText, id);
         }
 
-        System.out.println("words: " + words.size() + " url id " + id);
+        //      System.out.println("words: " + words.size() + " url id " + id);
 
 
     }
@@ -159,6 +164,10 @@ public class Crawler extends Object {
     }
 
     public void addPageToList(Page p) {
+        if(parsed.contains(p)){
+            int index = parsed.indexOf(p);
+            return;
+        }
         parsed.add(p);
 
     }
