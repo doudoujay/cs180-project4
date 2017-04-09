@@ -104,9 +104,9 @@ public class SearchTest {
         List<Result> testList;
 
         //Numerical term query
-        for(int i = 0; i<10 && i < res2.size(); i++)
+        for(int i = 0; i<10 && i < res3.size(); i++)
         {
-            Result r = res2.get(i);
+            Result r = res3.get(i);
             System.out.println((i + 1) + ") " + r.getURL() + ", score: " + r.getScore());
         }
         System.out.println("________________________");

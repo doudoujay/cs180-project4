@@ -14,7 +14,7 @@ public class Driver {
 	{
 		long start = System.currentTimeMillis();
 
-		Crawler c = new Crawler("https://cs.purdue.edu", "cs.purdue.edu", 250);
+		Crawler c = new Crawler("https://cs.purdue.edu", "cs.purdue.edu", 1000);
 		try{
 
 			c.crawl();

@@ -14,9 +14,16 @@ public class Word implements Serializable {
         this.word = word;
         this.postings.add(urlID);
     }
+    public Word(String word, List<Integer> postings){
+        this.word = word;
+        this.postings = postings;
+    }
 
     public void addURLID(int urlID) {
         postings.add(urlID);
+    }
+    public void setPostings(List<Integer> a){
+        this.postings = a;
     }
 
     public String getWord() {

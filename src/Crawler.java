@@ -43,7 +43,6 @@ public class Crawler extends Object {
 
     public void crawl() throws ParseException {
         currentID = 0;
-        System.out.println("toParse.isEmpty: " + toParse.isEmpty());
 
 //        process continues either until the Queue is empty or a preset limit to the number of URLs to visit is reached
         while ((toParse != null) && !toParse.isEmpty() && currentID < limit) {
