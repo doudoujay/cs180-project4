@@ -12,7 +12,7 @@ public class Search {
     public static List<Page> pageList;
     public static List<Word> wordList;
     public static List<Result> resultSet;
-    public static Object syncGate;
+    public final static Object syncGate = new Object();
     private String wordListFile;
     private String pageListFile;
     private FileUtils fu = new FileUtils();
@@ -40,52 +40,36 @@ public class Search {
 //        TODO
         //Execute a query over built tables and return an arraylist of Result objects.
 
+        nullCheck();
         // Split query String into array of terms
-        String[] terms = query.split(" ");
-        System.out.println("Query: " + query);
+        String[] terms = query.toLowerCase().split(" ");
 
         System.out.println("terms size: " + terms.length);
         //Create 5 Threads using SearchThread class
 
         int start = 0;
-        int increment = terms.length/5;
-        int end = terms.length/5 ;
-        Thread[] threads = new Thread[5];
-        boolean first = true;
+        int increment = wordList.size() / 5;
+        ArrayList<Thread> threads = new ArrayList<>();
 
-        for(Thread thr: threads){
+        for (int i = 0;i<5;i++) {
+            System.out.println("Start: " + start + "\tIncrement: " + increment + "\tEnd: " + (start+increment));
+            Thread t = new Thread(new SearchThread(start, start+increment, terms));
+            threads.add(t);
+            t.start();
+            start+= increment;
 
-            System.out.println("Start: " + start + "\tIncrement: " + increment + "\tEnd: " + end);
-            thr = new Thread(new SearchThread(start, end, terms));
-            // System.out.println("i: " + i);
-            System.out.println("Thread Created!");
-            start = start + increment;
-            end = end + increment;
-            if(first){
-                start++;
-                first = false;
-            }
 
         }
 
-        System.out.println(Arrays.toString(threads));
-        //Start Threads
-        for( Thread ts : threads) {
-            ts.start();
-            System.out.println("Thread Start!");
-        }
 
-
-
-
-        for( Thread t: threads)
+        for (Thread t : threads) {
             try {
                 t.join();
                 System.out.println("Thread Join!");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
+        }
 
         //sort list by score
         sort();
@@ -100,8 +84,8 @@ public class Search {
 
 
 //        Utility method to check if we have not read in our lists from file. If we haven't, call the setup() method.
-        if(pageList==null||wordList==null){
-            setup(wordListFile,pageListFile);
+        if (pageList.size() == 0 || wordList.size() == 0) {
+            setup(wordListFile, pageListFile);
         }
     }
 
