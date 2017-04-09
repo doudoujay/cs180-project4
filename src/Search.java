@@ -47,7 +47,7 @@ public class Search {
         int start = 0;
         int increment = wordList.size() / 5;
         ArrayList<Thread> threads = new ArrayList<>();
-
+        System.out.println(wordList.size());
         for (int i = 0;i<5;i++) {
             System.out.println("Start: " + start + "\tIncrement: " + increment + "\tEnd: " + (start+increment));
             Thread t = new Thread(new SearchThread(start, start+increment, terms));
@@ -58,15 +58,14 @@ public class Search {
 
         }
 
-
-        for (Thread t : threads) {
-            try {
-                t.join();
-                System.out.println("Thread Join!");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//
+//        for (Thread t : threads) {
+//            try {
+//                t.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         //sort list by score
         sort();

@@ -37,7 +37,7 @@ public class Crawler extends Object {
         parsed = new ArrayList<>();
         visited = new ArrayList<>();
         //words.add(new Word(seed, currentID));
-        addWordToList(seed,currentID);
+        addWordToList(seed, currentID);
 
     }
 
@@ -50,15 +50,16 @@ public class Crawler extends Object {
             //grab url from MyQueue
             Object url = toParse.remove().getData();
             //parse method
-
+            Document d = null;
             try {
-                if (parse(parser.getDocument(url.toString()), currentID)) {
+                d = parser.getDocument(url.toString());
+                if (parse(d, currentID)) {
                     addPageToList(new Page(url.toString(), currentID));
-                    currentID++;
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
+
 
 
             //increment currentID upon successful parse)
@@ -86,7 +87,7 @@ public class Crawler extends Object {
             parseLinks(doc);
             parseText(doc, id);
             return true;
-        } catch (Exception e) {
+        } catch (ParseException e) {
             e.printStackTrace();
             return false;
         }
@@ -104,7 +105,7 @@ public class Crawler extends Object {
                 if (visited.contains(oneLink)) {
                     int index = visited.indexOf(oneLink);
                     return;
-                }else {
+                } else {
                     visited.add(oneLink);
 //                Add to queue
                     addToQueue(oneLink);
@@ -164,11 +165,14 @@ public class Crawler extends Object {
     }
 
     public void addPageToList(Page p) {
-        if(parsed.contains(p)){
+        if (parsed.contains(p)) {
             int index = parsed.indexOf(p);
             return;
+        } else {
+
+            parsed.add(p);
+            currentID++;
         }
-        parsed.add(p);
 
     }
 

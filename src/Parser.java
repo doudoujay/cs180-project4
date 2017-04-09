@@ -33,14 +33,10 @@ public class Parser {
                 throw new ParseException("getDocument() failed: Document is null.");
             }
             return d;
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new ParseException("getDocument() failed. Connection failed.");
 
         }
-
-
-
-
 
 
     }

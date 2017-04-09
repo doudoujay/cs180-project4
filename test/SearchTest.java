@@ -104,6 +104,12 @@ public class SearchTest {
         List<Result> testList;
 
         //Numerical term query
+        for(int i = 0; i<10 && i < res2.size(); i++)
+        {
+            Result r = res2.get(i);
+            System.out.println((i + 1) + ") " + r.getURL() + ", score: " + r.getScore());
+        }
+        System.out.println("________________________");
         testList = sr.executeQuery("3");
         boolean comparisonResult = resListCompareSorted(testList, res3);
         assertTrue("Failed to correctly execute query \"3\"", correctEvaluation);
