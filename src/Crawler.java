@@ -52,9 +52,9 @@ public class Crawler extends Object {
             Document d = null;
             try {
                 d = parser.getDocument(url.toString());
-                if (parse(d, currentID)) {
+                /*if (parse(d, currentID)) {
                     addPageToList(new Page(url.toString(), currentID));
-                }
+                }*/
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -103,11 +103,12 @@ public class Crawler extends Object {
             if (isValidURL(oneLink) && isInDomain(oneLink)) {
                 if (visited.contains(oneLink)) {
                     int index = visited.indexOf(oneLink);
-                    return;
+
                 } else {
                     visited.add(oneLink);
 //                Add to queue
                     addToQueue(oneLink);
+                    addPageToList(new Page(oneLink,currentID));
                 }
 
 
