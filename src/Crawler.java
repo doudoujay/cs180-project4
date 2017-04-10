@@ -52,6 +52,7 @@ public class Crawler extends Object {
             Document d = null;
             try {
                 d = parser.getDocument(url.toString());
+                parse(d,currentID);
                 /*if (parse(d, currentID)) {
                     addPageToList(new Page(url.toString(), currentID));
                 }*/
